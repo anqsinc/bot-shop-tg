@@ -23,7 +23,7 @@ markdown = """
 sql.execute("""CREATE TABLE IF NOT EXISTS users (id BIGINT, nick TEXT, cash INT, access INT, bought INT)""")
 sql.execute("""CREATE TABLE IF NOT EXISTS shop (id INT, name TEXT, price INT, tovar TEXT, whobuy TEXT)""")
 db.commit()
-
+#Старт бота
 @client.message_handler(commands=['start'])
 def start(message):
     try:
@@ -40,7 +40,7 @@ def start(message):
             client.send_message(cid, f"⛔️ | Ты уже зарегистрирован! Пропиши /help чтобы узнать команды.")
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Profile оформление профиля
 @client.message_handler(commands=['profile', 'myinfo', 'myprofile'])
 def myprofile(message):
     try:
@@ -58,7 +58,7 @@ def myprofile(message):
             client.send_message(cid, f"*📇 | Твой профиль:*\n\n*👤 | Ваш ID:* {info[0]}\n*💸 | Баланс:* {info[2]} ₽\n*👑 | Уровень доступа:* {accessname}\n*🛒 | Куплено товаров:* {info[4]}\n\n*🗂 Чтобы посмотреть список купленных товаров напишите /mybuy*", parse_mode='Markdown')
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Список юзеров и прааа
 @client.message_handler(commands=['users'])
 def allusers(message):
     try:
@@ -84,7 +84,7 @@ def allusers(message):
             client.send_message(cid, f"{text}",parse_mode='Markdown')
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Оформление "Моих покупок"
 @client.message_handler(commands=['mybuy'])
 def mybuy(message):
     global cid
@@ -99,7 +99,7 @@ def mybuy(message):
         client.send_message(cid,f"{text}",parse_mode='Markdown',disable_web_page_preview=True)
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Пробить профиль чела (доступ от админки и разраба)
 @client.message_handler(commands=['getprofile', 'info'])
 def getprofile(message):
     try:
@@ -116,7 +116,7 @@ def getprofile(message):
                 client.register_next_step_handler(msg, getprofile_next)
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Проверка на админа и выдача прав
 def getprofile_next(message):
     try:
         cid = message.chat.id
@@ -133,7 +133,7 @@ def getprofile_next(message):
                 client.send_message(cid, f"*📇 | Профиль {info[1]}:*\n\n*ID пользователя:* {info[0]}\n*Баланс:* {info[2]} ₽\n*Уровень доступа:* {accessname}\n*Куплено товаров:* {info[4]}",parse_mode='Markdown')
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Отредачить товар в магазине(доступ онли админ и разраб)
 @client.message_handler(commands=['editbuy'])
 def editbuy(message):
     try:
@@ -154,7 +154,7 @@ def editbuy(message):
             msg = client.send_message(cid, f"🔰 | Выберите что Вы хотите изменить:",reply_markup=rmk,parse_mode='Markdown')
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Изменение названия товара
 def editbuy_name(message):
     try:
         cid = message.chat.id
@@ -182,7 +182,7 @@ def editbuy_name_new_name(message):
                 msg = client.send_message(cid, f"*🔰 | Данные об изменении названия товара:*\n\nID товара: {editbuynameidtovar}\nСтарое имя товара: {infoshop[1]}\nНовое имя товара: {editbuynametovar}\n\nВы подверждаете изменения?",parse_mode='Markdown',reply_markup=rmk)
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Измение ценика
 def editbuy_price(message):
     try:
         cid = message.chat.id
@@ -210,7 +210,7 @@ def editbuy_price_new_price(message):
                 msg = client.send_message(cid, f"*🔰 | Данные об изменении цены товара:*\n\nID товара: {editbuypriceidtovar}\nСтарая цена: {infoshop[2]}\nНовая цена: {editbuypricetovar}\n\nВы подверждаете изменения?",parse_mode='Markdown',reply_markup=rmk)
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Добавить ссылку на товар(если имеется)
 def editbuy_tovar(message):
     try:
         cid = message.chat.id
@@ -319,7 +319,7 @@ def removebuy(message):
             client.register_next_step_handler(msg, removebuy_next)
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Удаление товара из шопа и бд
 def removebuy_next(message):
     try:
         cid = message.chat.id
@@ -352,7 +352,7 @@ def removebuy_callback(call):
         client.answer_callback_query(callback_query_id=call.id)
     except:
         client.send_message(call.message.chat.id, f'🚫 | Ошибка при выполнении команды')
-
+#Добавление товара
 @client.message_handler(commands=['addbuy'])
 def addbuy(message):
     try:
@@ -422,7 +422,7 @@ def addbuy_result(message):
                 client.send_message(cid, f"⛔️ | Данный товар уже добавлен!")
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Покупка товара
 @client.message_handler(commands=['buy'])
 def buy(message):
     try:
@@ -440,7 +440,7 @@ def buy(message):
             msg = client.send_message(cid, f'{text}*Вы хотите перейти к покупке товара?*',parse_mode='Markdown',reply_markup=rmk)
     except:
         client.send_message(cid, f'🚫 | Ошибка при выполнении команды')
-
+#Следуйщий этап покупки. ОТРЕДАКТИРОВАТЬ
 def buy_next(message):
     try:
         cid = message.chat.id
@@ -502,7 +502,7 @@ def buy_callback(call):
         client.answer_callback_query(callback_query_id=call.id)
     except:
         client.send_message(call.message.chat.id, f'🚫 | Ошибка при выполнении команды')
-
+#Донат (Добавление средств на аккаунт)
 @client.message_handler(commands=['donate'])
 def donate(message):
     try:
@@ -564,11 +564,11 @@ def donate_result(call):
         client.answer_callback_query(callback_query_id=call.id)
     except:
         client.send_message(call.message.chat.id, f'🚫 | Ошибка при выполнении команды')
-
+#Узнать айди 
 @client.message_handler(commands=['getcid'])
 def getcid(message):
     client.send_message(message.chat.id, f"ID чата | {message.chat.id}\nТвой ID | {message.from_user.id}")
-
+#/help помощь по командам
 @client.message_handler(commands=['help'])
 def helpcmd(message):
     cid = message.chat.id
